@@ -1,0 +1,51 @@
+lab core session fm-hclab-hcname-57413-14487 ready (server pid 57541)
+# hc hc 0.1.21, lab session fm-hclab-hcname-57413-14487
+## S1 sanitize: mixed case, dot, underscore
+PASS fm-Fix.Login_Bug -> t1 name=fix-login_bug labels={"firstmate.home":"firstmate-3131f3d3","firstmate.task":"fm-Fix.Login_Bug","herdr.space":"fm-firstmate-3131f3d3","herdr.tab":"firstmate-3131f3d3-fm-Fix.Login_Bug"}
+## S2 truncation to 32
+PASS fm-abcdefghij-abcdefghij-abcdefghij-XYZ -> t2 name=abcdefghij-abcdefghij-abcdefghij labels={"firstmate.home":"firstmate-3131f3d3","firstmate.task":"fm-abcdefghij-abcdefghij-abcdefghij-XYZ","herdr.space":"fm-firstmate-3131f3d3","herdr.tab":"firstmate-3131f3d3-fm-abcdefghij-abcdefghij-abcdefghij-XYZ"}
+## S3 id-shaped names skipped, todo/test kept
+PASS fm-t7 -> t3 name=null labels={"firstmate.home":"firstmate-3131f3d3","firstmate.task":"fm-t7","herdr.space":"fm-firstmate-3131f3d3","herdr.tab":"firstmate-3131f3d3-fm-t7"}
+PASS fm-t8f -> t4 name=null labels={"firstmate.home":"firstmate-3131f3d3","firstmate.task":"fm-t8f","herdr.space":"fm-firstmate-3131f3d3","herdr.tab":"firstmate-3131f3d3-fm-t8f"}
+PASS fm-T12 -> t5 name=null labels={"firstmate.home":"firstmate-3131f3d3","firstmate.task":"fm-T12","herdr.space":"fm-firstmate-3131f3d3","herdr.tab":"firstmate-3131f3d3-fm-T12"}
+PASS fm-todo -> t6 name=todo labels={"firstmate.home":"firstmate-3131f3d3","firstmate.task":"fm-todo","herdr.space":"fm-firstmate-3131f3d3","herdr.tab":"firstmate-3131f3d3-fm-todo"}
+PASS fm-test -> t7 name=test labels={"firstmate.home":"firstmate-3131f3d3","firstmate.task":"fm-test","herdr.space":"fm-firstmate-3131f3d3","herdr.tab":"firstmate-3131f3d3-fm-test"}
+## S4 leading _ and - skipped
+PASS fm-_x -> t8 name=null labels={"firstmate.home":"firstmate-3131f3d3","firstmate.task":"fm-_x","herdr.space":"fm-firstmate-3131f3d3","herdr.tab":"firstmate-3131f3d3-fm-_x"}
+PASS fm--y -> t9 name=null labels={"firstmate.home":"firstmate-3131f3d3","firstmate.task":"fm--y","herdr.space":"fm-firstmate-3131f3d3","herdr.tab":"firstmate-3131f3d3-fm--y"}
+## S5 name_taken fallback: same task id in a second home
+PASS fm-dup -> t10 name=dup labels={"firstmate.home":"firstmate-3131f3d3","firstmate.task":"fm-dup","herdr.space":"fm-firstmate-3131f3d3","herdr.tab":"firstmate-3131f3d3-fm-dup"}
+# hometag now firstmate-157de819
+PASS fm-dup -> t11 name=null labels={"firstmate.home":"firstmate-157de819","firstmate.task":"fm-dup","herdr.space":"fm-firstmate-157de819","herdr.tab":"firstmate-157de819-fm-dup"}
+# raw hc on a taken name (oracle):
+{"error":{"hint":"pick another name, or kill the one holding it","kind":"name_taken","message":"a live terminal is already named \"dup\""}}
+# exit=1
+## S6 identity is labels: steer/capture/close the named and unnamed dup terminals
+# hometag now firstmate-3131f3d3
+PASS home A send+capture on named t10
+# hometag now firstmate-157de819
+PASS home B refused to steer home A's t10 (label check)
+PASS home B send+capture on unnamed t11
+PASS home B closed t11
+# hometag now firstmate-3131f3d3
+PASS home A closed named t10
+## S7 name freed after close: home A respawns fm-dup and gets the name back
+PASS fm-dup -> t12 name=dup labels={"firstmate.home":"firstmate-3131f3d3","firstmate.task":"fm-dup","herdr.space":"fm-firstmate-3131f3d3","herdr.tab":"firstmate-3131f3d3-fm-dup"}
+## hc ls (names as Herdr sees them)
+{"address":"t1","name":"fix-login_bug","task":null}
+{"address":"t2","name":"abcdefghij-abcdefghij-abcdefghij","task":null}
+{"address":"t3","name":null,"task":null}
+{"address":"t4","name":null,"task":null}
+{"address":"t5","name":null,"task":null}
+{"address":"t6","name":"todo","task":null}
+{"address":"t7","name":"test","task":null}
+{"address":"t8","name":null,"task":null}
+{"address":"t9","name":null,"task":null}
+{"address":"t12","name":"dup","task":null}
+# overall RC=0
+fm-hc-lab: FLEET-STATE TRIPWIRE FAILED: real herdr-core state changed during lab work
+fm-hc-lab: before: 49 files; after: 49 files
+50c50
+< ~/.local/state/herdr-core/default/terminals.json 34202393 1795175728 50837
+---
+> ~/.local/state/herdr-core/default/terminals.json 34202808 1795175735 50820
